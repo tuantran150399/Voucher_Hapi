@@ -26,7 +26,10 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${file}"
+            "program": "${workspaceFolder}\\node_modules\\@cspotcode\\source-map-support\\source-map-support.js",
+            "outFiles": [
+                "${workspaceFolder}/**/*.js"
+            ]
         }
     ]
 }

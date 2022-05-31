@@ -1,7 +1,7 @@
 import mongoose  from "mongoose";
 import { Agenda } from "agenda";
 
-const connectionString = 'mongodb://localhost:27017/Agenda';
+const connectionString = 'mongodb://localhost:27017/VoucherApplication';
 export const  run= async()  =>{
     await mongoose.connect(connectionString, { keepAlive: true, keepAliveInitialDelay: 300000 }).then(()=>
     {
