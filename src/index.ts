@@ -20,6 +20,11 @@ async function init() {
     const swaggerOptions: HapiSwagger.RegisterOptions = {
         info: {
             title: 'API Documentation for Voucher-Application',
+            version: 'v1.0.0',
+            contact: {
+                name: 'anh tuan',
+                email: 'anhtuan3683242@gmail.com'
+              }
         }
     };
 

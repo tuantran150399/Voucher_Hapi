@@ -1,5 +1,6 @@
 import { Request, ResponseToolkit } from '@hapi/hapi';
 import Event from '../models/Events';
+import {EventRequestInterface } from '../services/Interface/RequestInterface'
 //add event
 export const createEvent = async (req: Request, res: ResponseToolkit) => {
     try {
@@ -66,12 +67,4 @@ export const updateEvent = async (req: Request, res: ResponseToolkit) => {
 
 
 
-//interface joi
-interface EventRequestInterface extends Request {
-    payload: {
-        name: string;
-        startTime: Date;
-        endTime: Date;
-        maxQuantityVoucher: number;
-    };
-}
+
