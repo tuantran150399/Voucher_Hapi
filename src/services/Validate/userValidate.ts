@@ -1,6 +1,6 @@
 import Joi from "Joi";
 
-export const UseridPrams = Joi.object({
+export const UseridParams = Joi.object({
     id: Joi.string().required().description('the id to find the user')
 });
 

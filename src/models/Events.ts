@@ -2,7 +2,7 @@ import { Schema, model } from "mongoose";
 
 export interface Event {
     name: string,
-    maximum_quantityVoucher: number,
+    maximumVoucher: number,
     remainVoucher: number
 }
 //schema format
@@ -13,7 +13,7 @@ const eventSchema: Schema = new Schema({
         required: true,
         unique: true
     },
-    maximum_quantityVoucher: {
+    maximumVoucher: {
         type: Number,
         required: true
     }

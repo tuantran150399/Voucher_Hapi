@@ -1,7 +1,7 @@
 import { ResponseToolkit, Server } from '@hapi/hapi';
 // import { createUser, getUser, getUsers, deleteUser, updateUser } from "../controlers/userController";
-import {userPayload,UseridPrams} from '../services/Validate/userValidate';
-import { createUser,getUsers,getUserId,updateUser,deleteUser } from '../controllers/userControllers';
+import {userPayload,UseridParams} from '../services/Validate/userValidate';
+import { createUser,getUsers,getUserbyId,updateUser,deleteUser } from '../controllers/userControllers';
 // import {handleError} from '../services/handleError';
 // import Boom from '@hapi/boom';
 
@@ -29,13 +29,13 @@ export const userRoutes = (server: Server) => {
     server.route({
         method: 'GET',
         path: '/user/{id}',
-        handler: getUserId,
+        handler: getUserbyId,
         options: {
             description: 'Get user with an id',
             notes: 'Returns user by id',
             tags: ['api'],
             validate: {
-                params: UseridPrams,
+                params: UseridParams,
                 // failAction: (request, res:ResponseToolkit , err) => {
                 //     console.log(err)
                 //     throw Boom.badRequest(`Invalid request input`);
@@ -73,7 +73,7 @@ export const userRoutes = (server: Server) => {
                 }
             },
             validate: {
-                params: UseridPrams,
+                params: UseridParams,
                 payload: userPayload,
                 // failAction: handleError
             }
@@ -90,7 +90,7 @@ export const userRoutes = (server: Server) => {
             notes: 'Delete 1 user in database',
             tags: ['api'],
             validate: {
-                params: UseridPrams,
+                params: UseridParams,
                 // failAction: handleError
             }
         }

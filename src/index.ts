@@ -2,13 +2,14 @@ import * as Hapi from '@hapi/hapi';
 import { Server ,Request, ResponseToolkit } from '@hapi/hapi';
 import {run} from './mongoDB/mongoconnect';
 import { userRoutes } from './routes/userRoute';
+import { eventRoutes } from './routes/eventRoute';
+import {voucherRoutes} from './routes/vouRoute'
 import * as HapiSwagger from 'hapi-swagger';
 import Vision from '@hapi/vision';
 import Inert from '@hapi/inert';
 
+// import moment from 'moment';
 
-
-//../models/Events
 
 
 run();
@@ -40,9 +41,13 @@ async function init() {
             options: swaggerOptions
         }
     ];
+    // const datee = moment().add(7, 'days').format('L')
 
-
+    // console.log('Date: '+ datee+'')
+    //register routerr
     userRoutes(server);
+    eventRoutes(server);
+    voucherRoutes(server);
 
     await server.register(plugins);  
     function index(req: Request,res: ResponseToolkit): string {

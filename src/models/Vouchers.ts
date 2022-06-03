@@ -2,7 +2,8 @@ import { Schema, model } from "mongoose";
 
 export interface Voucher {
     code: string,
-    expire: boolean
+    expire: boolean,
+    event_id:String
 }
 //schema format
 
@@ -11,9 +12,12 @@ const voucherSchema: Schema = new Schema({
         type: String,
         required: true,
         unique: true
+    },event_id: {
+        type: String,
+        required: true
     },
     expire: {
-        type: Boolean,
+        type: String,
         required: true
     }
 }, { timestamps: true });

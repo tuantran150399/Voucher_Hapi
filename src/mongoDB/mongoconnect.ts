@@ -6,7 +6,6 @@ export const  run= async()  =>{
     await mongoose.connect(connectionString, { keepAlive: true, keepAliveInitialDelay: 300000 }).then(()=>
     {
         console.log('Database connected');
-        //console.log(mongoose.connection.readyState);
     });
 
     const agenda = new Agenda({
@@ -14,7 +13,6 @@ export const  run= async()  =>{
     agenda.define("check connection", async (job,done) => {
         // mongoose.connection.readyState = 1  or 2 is connected
         if(mongoose.connection.readyState==1 ||mongoose.connection.readyState==2  ){
-            //console.log(mongoose.connection.readyState);
             console.log('1min -database is working fine');
             done()
         }

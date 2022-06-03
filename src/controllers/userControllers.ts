@@ -1,8 +1,9 @@
 import { Request, ResponseToolkit } from '@hapi/hapi';
 import User from '../models/Users';
-
 import {UserRequestInterface } from '../services/Interface/RequestInterface';
 import {handleError} from '../services/handleError';
+
+
 export const createUser = async (req: Request, res: ResponseToolkit) => {
     try {
       const user = new User(req.payload);
@@ -23,7 +24,7 @@ export const getUsers = async (req: Request, res: ResponseToolkit) => {
 
 };
 
-export const getUserId = async (req: Request, res: ResponseToolkit) => {
+export const getUserbyId = async (req: Request, res: ResponseToolkit) => {
     try {
       const user= await User.findById(req.params.id);
       if (user) {
