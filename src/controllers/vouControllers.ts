@@ -7,7 +7,6 @@ import {commitWithRetry} from '../services/transactions';
 import Boom from '@hapi/boom';
 import {handleError} from '../services/handleError';
 import {voucherNotify} from '../services/emailHandler';
-import { etherealMailer } from "../services/mailer";
 
 export const randomCode= (length: Number): string => {
     let result           = 'Vou';
@@ -27,24 +26,22 @@ export const createVoucher = async (req: Request, res: ResponseToolkit) => {
    try{
       //check event available
          await commitWithRetry(session);
-         const event = await Event.findById(req.params.event_id);
-         console.log(event)
-         if(event){
-            if(event.remainVoucher>0){
+         const eventUpdate2 =  await  Event.findOneAndUpdate(
+            {_id: req.params.event_id  },
+            {$inc: { remainVoucher: -1 }},
+            {session, new: true}
+         );
+         if(eventUpdate2){
+            if(eventUpdate2?.remainVoucher>0){
+               //Create Voucher content
                const expireTime = moment().add(7, 'days').format('L')
                const codeVoucher = randomCode(6);
-               await voucherNotify(codeVoucher);
-               //await etherealMailer(codeVoucher);
-               const voucher = new Voucher({code: codeVoucher,event_id: event._id, expire:expireTime   });
+               //create voucher
+               const voucher = new Voucher({code: codeVoucher,event_id: eventUpdate2._id, expire:expireTime   });
                const voucherSave = await voucher.save();
-               
-               const eventUpdate2 =  await  Event.findOneAndUpdate(
-                  {_id: req.params.event_id  },
-                  {$inc: { remainVoucher: -1 }},
-                  {session, new: true}
-               );
+               //add code voucher into mail queue
+               await voucherNotify(codeVoucher);
                session.endSession(); // not test
-               console.log(req.params.event_id)
                console.log(eventUpdate2)
                return res.response({
                   code: voucherSave.code,

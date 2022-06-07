@@ -3,7 +3,7 @@ import { Schema, model } from "mongoose";
 export interface Event {
     name: string,
     maximumVoucher: number,
-    remainVoucher: number
+    remainVoucher: Number
 }
 //schema format
 
