@@ -1,5 +1,4 @@
-import { ResponseToolkit, Server } from '@hapi/hapi';
-// import { createUser, getUser, getUsers, deleteUser, updateUser } from "../controlers/userController";
+import { Server } from '@hapi/hapi';
 import {userPayload,UseridParams} from '../services/Validate/userValidate';
 import { createUser,getUsers,getUserbyId,updateUser,deleteUser } from '../controllers/userControllers';
 // import {handleError} from '../services/handleError';

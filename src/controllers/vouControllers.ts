@@ -29,7 +29,17 @@ export const createVoucher = async (req: Request, res: ResponseToolkit) => {
          const eventUpdate2 =  await  Event.findOneAndUpdate(
             {_id: req.params.event_id  },
             {$inc: { remainVoucher: -1 }},
-            {session, new: true}
+            {session, new: true},
+            function(error,result){
+               if(error) { console.log('error')
+                  return Boom.boomify(error, { statusCode: 456 });}
+               if(result){
+                  console.log(result)
+               }else{
+                  console.log('ac')
+               }
+
+            }
          );
          if(eventUpdate2){
             if(eventUpdate2?.remainVoucher>0){

@@ -7,10 +7,8 @@ import {voucherRoutes} from './routes/vouRoute'
 import * as HapiSwagger from 'hapi-swagger';
 import Vision from '@hapi/vision';
 import Inert from '@hapi/inert';
-
-// import moment from 'moment';
-
-
+import * as jwt from 'hapi-auth-jwt2';
+import { authRoutes } from './routes/authRoute';
 
 run();
 async function init() {
@@ -27,7 +25,15 @@ async function init() {
                 email: 'anhtuan3683242@gmail.com'
               }
         }
+
     };
+    await server.register(jwt);
+    server.auth.strategy('jwt', 'jwt',
+        {
+            key: '4Aw3o4MzFZqGFlqAYWXQQYkoR1B7MF21', // Never Share your secret key
+            validate: (decoded, request) => true, // validate function defined above,
+            verifyOptions: { algorithms: ['HS256'] }
+        });
 
     const plugins: Array<Hapi.ServerRegisterPluginObject<any>> = [
         {
@@ -41,15 +47,16 @@ async function init() {
             options: swaggerOptions
         }
     ];
-    // const datee = moment().add(7, 'days').format('L')
 
-    // console.log('Date: '+ datee+'')
     //register routerr
     userRoutes(server);
     eventRoutes(server);
     voucherRoutes(server);
+    authRoutes(server);
 
     await server.register(plugins);  
+
+    
     function index(req: Request,res: ResponseToolkit): string {
         console.log("Processing request", req.info.id);
         return "done"

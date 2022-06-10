@@ -9,3 +9,6 @@ export const eventPayload = Joi.object({
     maximumVoucher: Joi.number().required()
 
 });
+export const headerEventToken = Joi.object({
+    jwt_token: Joi.string().required()
+}).options({ allowUnknown: true });
