@@ -1,6 +1,6 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, Document } from "mongoose";
 
-export interface Voucher {
+export interface Voucher extends Document {
     code: string,
     expire: boolean,
     event_id:String

@@ -1,6 +1,6 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, Document } from "mongoose";
 
-export interface Event {
+export interface Event extends Document {
     name: string,
     maximumVoucher: number,
     remainVoucher: Number

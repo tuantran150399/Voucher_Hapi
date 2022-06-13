@@ -10,7 +10,7 @@ import Inert from '@hapi/inert';
 import * as jwt from 'hapi-auth-jwt2';
 import { authRoutes } from './routes/authRoute';
 
-run();
+
 async function init() {
     const server: Server = new Server({
         port: 3000,
@@ -27,6 +27,7 @@ async function init() {
         }
 
     };
+    run();
     await server.register(jwt);
     server.auth.strategy('jwt', 'jwt',
         {

@@ -1,6 +1,6 @@
 import { Request, ResponseToolkit } from '@hapi/hapi';
 import Voucher from '../models/Vouchers';
-import { startSession } from "mongoose"
+import { startSession } from "mongoose";
 import Event from '../models/Events';
 import moment from 'moment';
 import {commitWithRetry} from '../services/transactions';
@@ -20,37 +20,30 @@ export const randomCode= (length: Number): string => {
 
 export const createVoucher = async (req: Request, res: ResponseToolkit) => {
    const session = await startSession();
-   session.startTransaction();
    
+   session.startTransaction();
    //session.startTransaction( { readConcern: { level: "snapshot" }, writeConcern: { w: "majority" } } );
    try{
       //check event available
-         await commitWithRetry(session);
+      //await session.commitTransaction();
          const eventUpdate2 =  await  Event.findOneAndUpdate(
             {_id: req.params.event_id  },
             {$inc: { remainVoucher: -1 }},
-            {session, new: true},
-            function(error,result){
-               if(error) { console.log('error')
-                  return Boom.boomify(error, { statusCode: 456 });}
-               if(result){
-                  console.log(result)
-               }else{
-                  console.log('ac')
-               }
-
-            }
+            {session, new: true}
          );
+         
          if(eventUpdate2){
-            if(eventUpdate2?.remainVoucher>0){
+            if(eventUpdate2?.remainVoucher>=0){
                //Create Voucher content
+               
                const expireTime = moment().add(7, 'days').format('L')
                const codeVoucher = randomCode(6);
                //create voucher
                const voucher = new Voucher({code: codeVoucher,event_id: eventUpdate2._id, expire:expireTime   });
                const voucherSave = await voucher.save();
                //add code voucher into mail queue
-               await voucherNotify(codeVoucher);
+               //await voucherNotify(codeVoucher);
+               await commitWithRetry(session);
                session.endSession(); // not test
                console.log(eventUpdate2)
                return res.response({
@@ -76,6 +69,8 @@ export const createVoucher = async (req: Request, res: ResponseToolkit) => {
 }
 
 export const getVoucherOfEvent = async (req: Request, res: ResponseToolkit) => {
+   const session = await startSession();
+   session.startTransaction();
    try {
      const vouchers = await Voucher.find({ event_id: req.params.event_id });
      return res.response(vouchers);
