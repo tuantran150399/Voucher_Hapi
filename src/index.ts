@@ -1,87 +1,82 @@
-import * as Hapi from '@hapi/hapi';
-import { Server ,Request, ResponseToolkit } from '@hapi/hapi';
-import {run} from './mongoDB/mongoconnect';
-import { userRoutes } from './routes/userRoute';
-import { eventRoutes } from './routes/eventRoute';
-import {voucherRoutes} from './routes/vouRoute'
+import * as Hapi from "@hapi/hapi";
+import { Server, Request, ResponseToolkit } from "@hapi/hapi";
+import { run } from "./mongoDB/mongoconnect";
+import { userRoutes } from "./routes/userRoute";
+import { eventRoutes } from "./routes/eventRoute";
+import { voucherRoutes } from "./routes/vouRoute";
 import * as HapiSwagger from 'hapi-swagger';
-import Vision from '@hapi/vision';
-import Inert from '@hapi/inert';
-import * as jwt from 'hapi-auth-jwt2';
-import { authRoutes } from './routes/authRoute';
-
+import Vision from "@hapi/vision";
+import Inert from "@hapi/inert";
+import * as jwt from "hapi-auth-jwt2";
+import { authRoutes } from "./routes/authRoute";
 
 async function init() {
-    const server: Server = new Server({
-        port: 3000,
-        host: 'localhost'
-    });
-    const swaggerOptions: HapiSwagger.RegisterOptions = {
-        info: {
-            title: 'API Documentation for Voucher-Application',
-            version: 'v1.0.0',
-            contact: {
-                name: 'anh tuan',
-                email: 'anhtuan3683242@gmail.com'
-              }
-        }
+  const server: Server = new Server({
+    port: 3000,
+    host: "localhost",
+  });
+  const swaggerOptions: HapiSwagger.RegisterOptions = {
+    info: {
+      title: "API Documentation for Voucher-Application",
+      version: "v1.0.0",
+      contact: {
+        name: "anh tuan",
+        email: "anhtuan3683242@gmail.com",
+      },
+    },
+  };
+  run();
+  await server.register(jwt);
+  server.auth.strategy("jwt", "jwt", {
+    key: "secret", // Never Share your secret key
+    validate: (decoded, request) => true, // validate function defined above,
+    verifyOptions: { algorithms: ["HS256"] },
+  });
 
-    };
-    run();
-    await server.register(jwt);
-    server.auth.strategy('jwt', 'jwt',
-        {
-            key: '4Aw3o4MzFZqGFlqAYWXQQYkoR1B7MF21', // Never Share your secret key
-            validate: (decoded, request) => true, // validate function defined above,
-            verifyOptions: { algorithms: ['HS256'] }
-        });
+  const plugins: Array<Hapi.ServerRegisterPluginObject<any>> = [
+    {
+      plugin: Inert,
+    },
+    {
+      plugin: Vision,
+    },
+    {
+      plugin: HapiSwagger,
+      options: swaggerOptions,
+    },
+  ];
 
-    const plugins: Array<Hapi.ServerRegisterPluginObject<any>> = [
-        {
-            plugin: Inert
-        },
-        {
-            plugin: Vision
-        },
-        {
-            plugin: HapiSwagger,
-            options: swaggerOptions
-        }
-    ];
+  //register routerr
+  userRoutes(server);
+  eventRoutes(server);
+  voucherRoutes(server);
+  authRoutes(server);
 
-    //register routerr
-    userRoutes(server);
-    eventRoutes(server);
-    voucherRoutes(server);
-    authRoutes(server);
+  await server.register(plugins);
 
-    await server.register(plugins);  
+  function index(req: Request, res: ResponseToolkit): string {
+    console.log("Processing request", req.info.id);
+    return "done";
+  }
+  server.route({
+    method: "GET",
+    path: "/",
+    handler: (request, h) => {
+      index;
+      return "Hello World!";
+    },
+  });
 
-    
-    function index(req: Request,res: ResponseToolkit): string {
-        console.log("Processing request", req.info.id);
-        return "done"
-    }
-    server.route({
-        method: 'GET',
-        path: '/',
-        handler: (request, h) => {
-            index
-            return 'Hello World!';
-        }
-    });
-    
-    try {
-        await server.start();
-        console.log(`Listening on ${server.settings.host}:${server.settings.port}`);
-    } catch(err) {
-        console.log(err);
-    }
-    process.on('unhandledRejection', (err) => {
-        console.error("unhandledRejection");
-        console.error(err);
-        process.exit(1);
-    });
-
+  try {
+    await server.start();
+    console.log(`Listening on ${server.settings.host}:${server.settings.port}`);
+  } catch (err) {
+    console.log(err);
+  }
+  process.on("unhandledRejection", (err) => {
+    console.error("unhandledRejection");
+    console.error(err);
+    process.exit(1);
+  });
 }
-init()
+init();

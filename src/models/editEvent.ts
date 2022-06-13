@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-export interface editEvent  {
+export interface EditEvent  {
     eventId: string,
     editable: boolean,
     userEditId: string,
@@ -27,4 +27,4 @@ const editEventSchema = new Schema({
 });
 
 
-export default model<editEvent>("editEvent", editEventSchema);
+export default model<EditEvent>("EditEvent", editEventSchema);

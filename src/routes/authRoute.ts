@@ -60,7 +60,8 @@ export const authRoutes = (server:Server) =>{
           notes: 'Maintain by event id in path and token of user',
           tags: ['api'], // ADD THIS TAG
           validate: {
-            params: eventIdParams
+            params: eventIdParams,
+            headers: headerEventToken
           },
         },
         handler: editMaintain
