@@ -9,11 +9,12 @@ import Vision from "@hapi/vision";
 import Inert from "@hapi/inert";
 import * as jwt from "hapi-auth-jwt2";
 import { authRoutes } from "./routes/authRoute";
+require('dotenv').config();
 
 async function init() {
   const server: Server = new Server({
-    port: 3000,
-    host: "localhost",
+    port: process.env.PORT,
+    host: process.env.DB_HOST,
   });
   const swaggerOptions: HapiSwagger.RegisterOptions = {
     info: {
@@ -25,6 +26,7 @@ async function init() {
       },
     },
   };
+
   run();
   await server.register(jwt);
   server.auth.strategy("jwt", "jwt", {

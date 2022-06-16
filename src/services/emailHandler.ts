@@ -11,7 +11,7 @@ const options = {
   }
 export const voucherNotify = async (data: string) => {
     try{
-        console.log(data)
+        //console.log(data)
         const data2 = {code:data};
         EmailQueue.add(data2, options );
     }catch(error){
@@ -28,10 +28,9 @@ EmailQueue.process(async (job, done) => {
     try {
         await job.progress(42);
         await etherealMailer(job.data.code);
-        done();
-        console.log(job.data);
     } catch (error) {
-        done();
         handleError(error)
+    }finally {
+        done();
     }
 });

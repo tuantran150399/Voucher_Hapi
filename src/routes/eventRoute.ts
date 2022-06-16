@@ -1,6 +1,6 @@
 import { Server } from '@hapi/hapi';
 import {eventPayload,eventIdParams} from '../services/Validate/eventValidate';
-import {createEvent,getEventbyID,getEvents,deleteEvent,updateEvent} from '../controllers/eventControllers';
+import {createEvent,getEventByID,getEvents,deleteEvent,updateEvent} from '../controllers/eventControllers';
 export const eventRoutes = (server: Server) => {
 
     server.route({
@@ -27,7 +27,7 @@ export const eventRoutes = (server: Server) => {
     server.route({
         method: 'GET',
         path: '/event/{event_id}',
-        handler: getEventbyID,
+        handler: getEventByID,
         options: {
             description: 'Get an event with an id',
             notes: 'Returns event by id',

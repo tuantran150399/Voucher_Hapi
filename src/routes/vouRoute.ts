@@ -1,7 +1,6 @@
 import { Server } from '@hapi/hapi';
 //import {getEventIdParams} from '../services/Validate/voucherValidate';
 import {getVoucherOfEvent,createVoucher } from '../controllers/vouControllers';
-import {handleError} from '../services/handleError';
 import {eventIdParams} from '../services/Validate/eventValidate';
 
 export const voucherRoutes = (server: Server) => {

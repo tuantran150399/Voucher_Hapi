@@ -9,6 +9,8 @@ import * as jwt from "jsonwebtoken";
 import { commitWithRetry } from "../services/transactions";
 import { handleError } from "../services/handleError";
 import EditEvent from "../models/EditEvent";
+require("dotenv").config();
+
 //login
 export const login = async (req: Request, res: ResponseToolkit) => {
   const request = <UserRequestInterface>req;
@@ -33,7 +35,9 @@ export const editAbleMe = async (req: Request, res: ResponseToolkit) => {
   try {
     const paramsID = req.params.event_id;
     const eventId = await Event.findOne({ _id: paramsID }).exec();
-    const decode = <decodeJwt>jwt.verify(req.headers.jwt_token, "secret");
+    const decode = <decodeJwt>(
+      jwt.verify(req.headers.jwt_token, `${process.env.SECRET_KEY}`)
+    );
     if (!decode || !eventId) {
       session.endSession();
       return Boom.badRequest("Input Event Id invalid or Wrong Token");
@@ -81,7 +85,9 @@ export const editRelease = async (req: Request, res: ResponseToolkit) => {
   const session = await startSession();
   session.startTransaction();
   try {
-    const decode = <decodeJwt>jwt.verify(req.headers.jwt_token, "secret");
+    const decode = <decodeJwt>(
+      jwt.verify(req.headers.jwt_token, `${process.env.SECRET_KEY}`)
+    );
     const paramsID = req.params.event_id;
     const findEvent = await EditEvent.findOne({ eventId: paramsID });
     if (!decode || !findEvent) {
@@ -113,7 +119,9 @@ export const editMaintain = async (req: Request, res: ResponseToolkit) => {
   const session = await startSession();
   session.startTransaction();
   try {
-    const decode = <decodeJwt>jwt.verify(req.headers.jwt_token, "secret");
+    const decode = <decodeJwt>(
+      jwt.verify(req.headers.jwt_token, `${process.env.SECRET_KEY}`)
+    );
     const paramsID = req.params.event_id;
     const findEvent = await EditEvent.findOne({ eventId: paramsID });
     console.log(findEvent);

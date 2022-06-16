@@ -4,7 +4,7 @@ import { startSession } from "mongoose";
 import Event from "../models/Events";
 import moment from "moment";
 import { commitWithRetry } from "../services/transactions";
-
+import Boom from "@hapi/boom";
 import { handleError } from "../services/handleError";
 import { voucherNotify } from "../services/emailHandler";
 
@@ -48,7 +48,6 @@ export const createVoucher = async (req: Request, res: ResponseToolkit) => {
         //add code voucher into mail queue
         await voucherNotify(codeVoucher);
         await commitWithRetry(session);
-        session.endSession(); // not test
         console.log(eventUpdate2);
         return res
           .response({
@@ -58,18 +57,19 @@ export const createVoucher = async (req: Request, res: ResponseToolkit) => {
           })
           .code(200);
       } else {
-        session.endSession(); // not test
-        throw new Error("Vouchers are sold out");
+        return Boom.badRequest("Vouchers are sold out");
       }
     } else {
-      session.endSession(); // not test
-      throw new Error("Event not available");
+      // not test
+      return Boom.badRequest("Event not available");
     }
   } catch (error) {
     console.log("Caught exception during transaction, aborting.");
     await session.abortTransaction();
-    console.log(error);
     res.response(handleError(error)).code(500);
+  } finally {
+    session.endSession();
+    console.log("end here");
   }
 };
 

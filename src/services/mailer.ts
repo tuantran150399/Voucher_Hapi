@@ -4,13 +4,15 @@ import { handleError } from "./handleError";
 export const etherealMailer = async (code: string) => {
   const receiver = "anhtuan3683242@gmail.com";
   const transporter = nodemailer.createTransport({
-    host: "smtp.ethereal.email",
+    host: "smtp-mail.outlook.com",
     port: 587,
     secure: false,
-    service: "Gmail",
+    tls: {
+      ciphers: "SSLv3",
+    },
     auth: {
-      user: "phamvqcuong99@gmail.com", // generated ethereal user
-      pass: "Quoccuong_999", // generated ethereal password
+      user: process.env.AUTH_USER_EMAIL, // generated ethereal user
+      pass: process.env.AUTH_PASS_EMAIL, // generated ethereal password
     },
   });
   transporter.verify(function (error, success) {
@@ -21,7 +23,7 @@ export const etherealMailer = async (code: string) => {
     }
   });
   const options = {
-    from: "dorian.fay59@ethereal.email",
+    from: process.env.AUTH_USER_EMAIL,
     to: receiver,
     subject: "New Voucher Generated",
     html: `<p>Hello ${receiver}! <br> Notify you that a voucher has 

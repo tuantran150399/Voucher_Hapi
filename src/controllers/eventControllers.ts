@@ -19,7 +19,7 @@ export const createEvent = async (req: Request, res: ResponseToolkit) => {
 };
 
 //get evnt with id
-export const getEventbyID = async (req: Request, res: ResponseToolkit) => {
+export const getEventByID = async (req: Request, res: ResponseToolkit) => {
   try {
     const event = await Event.findById(req.params.event_id);
     if (event) {
