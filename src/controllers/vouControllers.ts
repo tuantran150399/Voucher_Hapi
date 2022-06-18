@@ -39,20 +39,29 @@ export const createVoucher = async (req: Request, res: ResponseToolkit) => {
         const codeVoucher = randomCode(6);
 
         //create voucher
-        const voucher = new Voucher({
-          code: codeVoucher,
-          event_id: eventUpdate2._id,
-          expire: expireTime,
-        });
-        const voucherSave = await voucher.save();
+        // const voucher = new Voucher({
+        //   code: codeVoucher,
+        //   event_id: eventUpdate2._id,
+        //   expire: expireTime,
+        // });
+        const voucherSave = await Voucher.create(
+          [
+            {
+              code: codeVoucher,
+              event_id: eventUpdate2._id,
+              expire: expireTime,
+            },
+          ],
+          { session: session }
+        );
+        //const voucherSave = await voucher.save();
         //add code voucher into mail queue
         await voucherNotify(codeVoucher);
         await commitWithRetry(session);
-        console.log(eventUpdate2);
+        console.log(voucherSave);
         return res
           .response({
-            code: voucherSave.code,
-            eventVoucher: voucherSave.event_id,
+            voucher: voucherSave,
             eventInfo: eventUpdate2,
           })
           .code(200);
@@ -68,7 +77,7 @@ export const createVoucher = async (req: Request, res: ResponseToolkit) => {
     await session.abortTransaction();
     res.response(handleError(error)).code(500);
   } finally {
-    session.endSession();
+    session?.endSession();
     console.log("end here");
   }
 };

@@ -13,7 +13,7 @@ const voucherSchema: Schema = new Schema({
         required: true,
         unique: true
     },event_id: {
-        type: String,
+        type: Schema.Types.ObjectId,
         required: true
     },
     expire: {

@@ -48,6 +48,7 @@ export const authRoutes = (server:Server) =>{
           tags: ['api'], // ADD THIS TAG
           validate: {
             params: eventIdParams,
+            headers: headerEventToken
           },
         },
         handler: editRelease

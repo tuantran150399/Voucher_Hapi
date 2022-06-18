@@ -53,7 +53,6 @@ export const editAbleMe = async (req: Request, res: ResponseToolkit) => {
         newEditEvent.userEditId = decode._id;
         await newEditEvent.save();
 
-        session.endSession();
         return res.response("Allowed").code(200);
         //IF EDITABLE EVENT already have
       } else if (findEvent && findEvent.editable == true) {
@@ -63,21 +62,20 @@ export const editAbleMe = async (req: Request, res: ResponseToolkit) => {
           { session, new: true }
         );
         await commitWithRetry(session);
-        session.endSession();
         if (event) {
           return res.response("Allowed").code(200);
         } else {
           return Boom.badRequest("Update tracking failed");
         }
       } else {
-        session.endSession();
         return Boom.conflict("Not Allowed - Another user is editting");
       }
     }
   } catch (error) {
     await session.abortTransaction();
-    session.endSession();
     res.response(handleError(error));
+  } finally {
+    session?.endSession();
   }
 };
 
@@ -90,20 +88,20 @@ export const editRelease = async (req: Request, res: ResponseToolkit) => {
     );
     const paramsID = req.params.event_id;
     const findEvent = await EditEvent.findOne({ eventId: paramsID });
+
     if (!decode || !findEvent) {
-      session.endSession();
       return Boom.badRequest("Input Event Id invalid or Wrong Token");
-    } else if (findEvent.editable == false) {
+    } else if (findEvent.editable == true) {
       return Boom.badRequest("The Edit event already released");
     }
     const event = await EditEvent.findOneAndUpdate(
       { eventId: paramsID, userEditId: decode._id },
-      { editable: true, userEditId: "" },
+      { editable: true, userEditId: null },
       { session, new: true }
     );
+    //console.log(event)
     await commitWithRetry(session);
     if (event) {
-      session.endSession();
       return res.response("Released").code(200);
     } else {
       throw new Error("EDITEVENT Release failed");
@@ -111,8 +109,10 @@ export const editRelease = async (req: Request, res: ResponseToolkit) => {
   } catch (error) {
     //console.log(error)
     await session.abortTransaction();
-    session.endSession();
+
     res.response(handleError(error));
+  } finally {
+    session?.endSession();
   }
 };
 export const editMaintain = async (req: Request, res: ResponseToolkit) => {
@@ -124,9 +124,8 @@ export const editMaintain = async (req: Request, res: ResponseToolkit) => {
     );
     const paramsID = req.params.event_id;
     const findEvent = await EditEvent.findOne({ eventId: paramsID });
-    console.log(findEvent);
+    //console.log(findEvent);
     if (!decode || !findEvent) {
-      session.endSession();
       return Boom.badRequest("Input Event Id invalid or Wrong Token");
     } else {
       const maintainEvent = await EditEvent.findOneAndUpdate(
@@ -135,7 +134,7 @@ export const editMaintain = async (req: Request, res: ResponseToolkit) => {
         { session }
       );
       await commitWithRetry(session);
-      session.endSession();
+
       if (maintainEvent) {
         return res
           .response({
@@ -149,7 +148,9 @@ export const editMaintain = async (req: Request, res: ResponseToolkit) => {
     }
   } catch (error) {
     await session.abortTransaction();
-    session.endSession();
+
     res.response(handleError(error)).code(500);
+  } finally {
+    session?.endSession();
   }
 };

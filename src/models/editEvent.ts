@@ -9,7 +9,7 @@ export interface EditEvent  {
 
 const editEventSchema = new Schema({
     eventId: {
-        type: String,
+        type: Schema.Types.ObjectId,
         required: true
     },
     editable: {
@@ -17,12 +17,12 @@ const editEventSchema = new Schema({
         required: true
     },
     userEditId: {
-        type: String
+        type: Schema.Types.ObjectId
     },
-    time: {
+    createdAt: {
         type: Date,
         default: Date.now,
-        expires: 3000
+        expires: 300
     }
 });
 
