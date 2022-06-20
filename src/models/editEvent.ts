@@ -10,7 +10,8 @@ export interface EditEvent  {
 const editEventSchema = new Schema({
     eventId: {
         type: Schema.Types.ObjectId,
-        required: true
+        required: true,
+        unique: true
     },
     editable: {
         type: Boolean,

@@ -44,6 +44,7 @@ export const createVoucher = async (req: Request, res: ResponseToolkit) => {
         //   event_id: eventUpdate2._id,
         //   expire: expireTime,
         // });
+        
         const voucherSave = await Voucher.create(
           [
             {
