@@ -1,27 +1,28 @@
 import { Schema, model, Document } from "mongoose";
 
 export interface Event extends Document {
-    name: string,
-    maximumVoucher: number,
-    remainVoucher: Number
+  name: string;
+  maximumVoucher: number;
+  remainVoucher: Number;
 }
 //schema format
 
-const eventSchema: Schema = new Schema({
+const eventSchema: Schema = new Schema(
+  {
     name: {
-        type: String,
-        required: true,
-        unique: true
+      type: String,
+      required: true,
+      unique: true,
     },
     maximumVoucher: {
-        type: Number,
-        required: true
-    }
-    ,
+      type: Number,
+      required: true,
+    },
     remainVoucher: {
-        type: Number
-    }
-}, { timestamps: true });
+      type: Number,
+    },
+  },
+  { timestamps: true }
+);
 
-
-export default model<Event>('Event', eventSchema);
+export default model<Event>("Event", eventSchema);
