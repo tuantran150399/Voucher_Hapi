@@ -24,12 +24,17 @@
     "@hapi/inert": "^6.0.5",
     "@hapi/vision": "^6.1.0",
     "@types/bcrypt": "^5.0.0",
+    "@types/boom": "^7.3.2",
     "@types/bull": "^3.15.8",
+    "@types/del": "^4.0.0",
+    "@types/hapi": "^18.0.7",
     "@types/hapi__hapi": "^20.0.12",
     "@types/hapi__inert": "^5.2.3",
     "@types/hapi__vision": "^5.5.3",
     "@types/jsonwebtoken": "^8.5.8",
+    "@types/lokijs": "^1.5.7",
     "@types/nodemailer": "^6.4.4",
+    "@types/uuid": "^8.3.4",
     "agenda": "^4.3.0",
     "bcrypt": "^5.0.1",
     "dotenv": "^16.0.1",
@@ -38,7 +43,8 @@
     "moment": "^2.29.3",
     "mongoose": "^6.3.4",
     "nodemailer": "^6.7.5",
-    "ts-node-dev": "^2.0.0-0"
+    "ts-node-dev": "^2.0.0-0",
+    "typescript": "^4.7.4"
   },
   "dependencies": {
     "bull": "^4.8.3",

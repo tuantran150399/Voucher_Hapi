@@ -35,11 +35,11 @@ export const editAbleMe = async (req: Request, res: ResponseToolkit) => {
   try {
     const paramsID = req.params.event_id;
     const eventId = await Event.findOne({ _id: paramsID }).exec();
+
     const decode = <decodeJwt>(
       jwt.verify(req.headers.jwt_token, `${process.env.SECRET_KEY}`)
     );
     if (!decode || !eventId) {
-      session.endSession();
       return Boom.badRequest("Input Event Id invalid or Wrong Token");
     } else {
       const findEvent = await EditEvent.findOne({ eventId: paramsID }).exec();
@@ -51,7 +51,8 @@ export const editAbleMe = async (req: Request, res: ResponseToolkit) => {
         newEditEvent.eventId = paramsID;
         newEditEvent.editable = false;
         newEditEvent.userEditId = decode._id;
-        await newEditEvent.save();
+        await newEditEvent.save({ session });
+        await commitWithRetry(session);
 
         return res.response("Allowed").code(200);
         //IF EDITABLE EVENT already have
@@ -75,6 +76,7 @@ export const editAbleMe = async (req: Request, res: ResponseToolkit) => {
     await session.abortTransaction();
     res.response(handleError(error));
   } finally {
+    //console.log("END HERE")
     session?.endSession();
   }
 };
@@ -133,9 +135,9 @@ export const editMaintain = async (req: Request, res: ResponseToolkit) => {
         { time: new Date() },
         { session }
       );
-      await commitWithRetry(session);
 
       if (maintainEvent) {
+        await commitWithRetry(session);
         return res
           .response({
             Message: "Maintain editing successfully",
@@ -151,6 +153,7 @@ export const editMaintain = async (req: Request, res: ResponseToolkit) => {
 
     res.response(handleError(error)).code(500);
   } finally {
+    //console.log('END HERE')
     session?.endSession();
   }
 };
