@@ -2,11 +2,12 @@
   "name": "voucher_hapi",
   "version": "1.0.0",
   "description": "Voucher Application",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "build": "tsc",
     "dev": "ts-node-dev src/index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "lab -v test/indexs.ts"
   },
   "repository": {
     "type": "git",
@@ -20,26 +21,33 @@
   "homepage": "https://github.com/tuantran150399/Voucher_Hapi#readme",
   "devDependencies": {
     "@hapi/boom": "^10.0.0",
+    "@hapi/code": "^9.0.1",
     "@hapi/hapi": "^20.2.2",
     "@hapi/inert": "^6.0.5",
+    "@hapi/lab": "^25.0.1",
     "@hapi/vision": "^6.1.0",
     "@types/bcrypt": "^5.0.0",
     "@types/boom": "^7.3.2",
     "@types/bull": "^3.15.8",
+    "@types/code": "^4.0.6",
     "@types/del": "^4.0.0",
     "@types/hapi": "^18.0.7",
     "@types/hapi__hapi": "^20.0.12",
     "@types/hapi__inert": "^5.2.3",
     "@types/hapi__vision": "^5.5.3",
     "@types/jsonwebtoken": "^8.5.8",
+    "@types/lab": "^11.1.1",
     "@types/lokijs": "^1.5.7",
     "@types/nodemailer": "^6.4.4",
     "@types/uuid": "^8.3.4",
     "agenda": "^4.3.0",
     "bcrypt": "^5.0.1",
+    "code": "^5.2.4",
     "dotenv": "^16.0.1",
-    "hapi-swagger": "^14.5.4",
+    "hapi-swagger": "^14.5.5",
     "jsonwebtoken": "^8.5.1",
+    "lab": "^18.0.2",
+    "lab-transform-typescript": "^3.0.1",
     "moment": "^2.29.3",
     "mongoose": "^6.3.4",
     "nodemailer": "^6.7.5",
@@ -47,7 +55,9 @@
     "typescript": "^4.7.4"
   },
   "dependencies": {
+    "@hapi/eslint-plugin": "^6.0.0",
     "bull": "^4.8.3",
-    "hapi-auth-jwt2": "^10.2.0"
+    "hapi-auth-jwt2": "^10.2.0",
+    "mocha": "^10.0.0"
   }
 }

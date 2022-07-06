@@ -4,18 +4,17 @@ import { run } from "./mongoDB/mongoconnect";
 import { userRoutes } from "./routes/userRoute";
 import { eventRoutes } from "./routes/eventRoute";
 import { voucherRoutes } from "./routes/vouRoute";
-import * as HapiSwagger from 'hapi-swagger';
+import * as HapiSwagger from "hapi-swagger";
 import Vision from "@hapi/vision";
 import Inert from "@hapi/inert";
 import * as jwt from "hapi-auth-jwt2";
 import { authRoutes } from "./routes/authRoute";
-require('dotenv').config();
-
-async function init() {
-  const server: Server = new Server({
-    port: process.env.PORT,
-    host: process.env.DB_HOST,
-  });
+require("dotenv").config();
+const server: Server = new Server({
+  port: process.env.PORT,
+  host: process.env.DB_HOST,
+});
+async function start() {
   const swaggerOptions: HapiSwagger.RegisterOptions = {
     info: {
       title: "API Documentation for Voucher-Application",
@@ -81,4 +80,9 @@ async function init() {
     process.exit(1);
   });
 }
-init();
+//test
+export const init = async () => {
+  await server.initialize();
+  return server;
+};
+start();
