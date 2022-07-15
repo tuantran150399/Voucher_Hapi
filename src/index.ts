@@ -14,6 +14,8 @@ const server: Server = new Server({
   port: process.env.PORT,
   host: process.env.DB_HOST,
 });
+
+let serverSetup = false;
 async function start() {
   const swaggerOptions: HapiSwagger.RegisterOptions = {
     info: {
@@ -80,9 +82,20 @@ async function start() {
     process.exit(1);
   });
 }
+
 //test
+
+start();
+const setupServer = async () =>
+{
+    if (serverSetup) return;
+    
+    serverSetup = true;
+};
 export const init = async () => {
+  
+  console.log(server)
   await server.initialize();
+  await setupServer();
   return server;
 };
-start();
