@@ -2,9 +2,9 @@ import { Schema, Document, model } from "mongoose";
 
 export interface User {
   _id: Schema.Types.ObjectId;
-  username: string;
-  password: string;
-  email: string;
+  username: String;
+  password: String;
+  email: String;
 }
 //User Maybe have image, age, token,...
 //schema format
@@ -28,3 +28,4 @@ const userSchema: Schema = new Schema(
 );
 
 export default model<User>("User", userSchema);
+export const Us= model('User', userSchema);

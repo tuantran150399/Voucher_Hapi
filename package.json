@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "dev": "ts-node-dev src/index.ts",
-    "test": "lab --sourcemaps --transform node_modules/lab-transform-typescript -l test"
+    "dev": "ts-node-dev src/app.ts",
+    "test": "lab --sourcemaps --transform node_modules/lab-transform-typescript -vl test/index.js",
+    "test2": "mocha  test/database.js"
   },
   "repository": {
     "type": "git",
@@ -50,6 +51,7 @@
     "jsonwebtoken": "^8.5.1",
     "lab": "^18.0.2",
     "lab-transform-typescript": "^3.0.1",
+    "mock-mongoose": "^8.0.1-a",
     "moment": "^2.29.3",
     "mongoose": "^6.3.4",
     "nodemailer": "^6.7.5",
@@ -61,7 +63,6 @@
     "bull": "^4.8.3",
     "chai": "^4.3.6",
     "hapi-auth-jwt2": "^10.2.0",
-    "mocha": "^10.0.0",
-    "mock-mongoose": "^8.0.1-a"
+    "mocha": "^10.0.0"
   }
 }

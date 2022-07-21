@@ -41,13 +41,6 @@ export const userRoutes = (server: Server) => {
       tags: ["api"],
       validate: {
         params: UseridParams,
-        // failAction: (request, res:ResponseToolkit , err) => {
-        //     console.log(err)
-        //     throw Boom.badRequest(`Invalid request input`);
-        //     // const source = err.output.payload.validation?.source
-        //     // request.log(['validation', 'error', source], err.message);
-        //     // throw Boom.badRequest(`Invalid request ${source} input`);
-        // }
       },
     },
   });

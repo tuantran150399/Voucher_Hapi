@@ -15,8 +15,7 @@ const server: Server = new Server({
   host: process.env.DB_HOST,
 });
 
-let serverSetup = false;
-async function start() {
+export const start = async () => {
   const swaggerOptions: HapiSwagger.RegisterOptions = {
     info: {
       title: "API Documentation for Voucher-Application",
@@ -27,8 +26,6 @@ async function start() {
       },
     },
   };
-
-  run();
   await server.register(jwt);
   server.auth.strategy("jwt", "jwt", {
     key: "secret", // Never Share your secret key
@@ -49,26 +46,7 @@ async function start() {
     },
   ];
 
-  //register routerr
-  userRoutes(server);
-  eventRoutes(server);
-  voucherRoutes(server);
-  authRoutes(server);
-
   await server.register(plugins);
-
-  function index(req: Request, res: ResponseToolkit): string {
-    console.log("Processing request", req.info.id);
-    return "done";
-  }
-  server.route({
-    method: "GET",
-    path: "/",
-    handler: (request, h) => {
-      index;
-      return "Hello World!";
-    },
-  });
 
   try {
     await server.start();
@@ -81,21 +59,28 @@ async function start() {
     console.error(err);
     process.exit(1);
   });
-}
-
-//test
-
-start();
-const setupServer = async () =>
-{
-    if (serverSetup) return;
-    
-    serverSetup = true;
 };
+run();
+//register router
+userRoutes(server);
+eventRoutes(server);
+voucherRoutes(server);
+authRoutes(server);
+function index(req: Request, res: ResponseToolkit): string {
+  console.log("Processing request", req.info.id);
+  return "done";
+}
+server.route({
+  method: "GET",
+  path: "/",
+  handler: (request, h) => {
+    index;
+    return "Hello World!";
+  },
+});
+
 export const init = async () => {
-  
-  console.log(server)
+
   await server.initialize();
-  await setupServer();
   return server;
 };
