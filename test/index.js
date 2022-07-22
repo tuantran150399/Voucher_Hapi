@@ -7,7 +7,7 @@ const { init } = require("../src/server");
 const HTTP_PORT = 3000;
 const HTTP_STATUS_OK = 200;
 
-describe("General Server Tests", () => {
+describe("Server should start successfully", () => {
     let server;
 
     beforeEach(async () => {
@@ -18,13 +18,13 @@ describe("General Server Tests", () => {
         await server.stop();
     });
 
-    it("Starts successfully", async () => {
+    it("It should starts successfully", async () => {
         expect(server.type).to.equal("tcp");
         expect(server.settings.port).to.equal(HTTP_PORT);
         expect(server.settings.host).to.equal("localhost");
     });
 
-    it("Responds to GET requests", async () => {
+    it("Should access index page and have the correct message ", async () => {
         const res = await server.inject({
             method: "GET",
             url: "/"
@@ -33,14 +33,8 @@ describe("General Server Tests", () => {
         expect(res.result).to.equal('Hello World!');
         expect(res.statusCode).to.equal(HTTP_STATUS_OK);
     });
-    it("Responds to access user router", async () => {
-        const res = await server.inject({
-            method: "GET",
-            url: "/users"
-        });
-        expect(res.statusCode).to.equal(HTTP_STATUS_OK);
-    });
-    it("Responds to access event router", async () => {
+
+    it("Should success take responds to get events", async () => {
         const res = await server.inject({
             method: "GET",
             url: "/events"
@@ -48,35 +42,24 @@ describe("General Server Tests", () => {
         expect(res.result).to.be.instanceof(Array);
         expect(res.statusCode).to.equal(HTTP_STATUS_OK);
     });
-    it("Responds to access 1 choosen user", async () => {
-        const res = await server.inject({
-            method: "GET",
-            url: "/user/62a6eb6653e1608f1a11393d"
-        });
 
-        expect(res.statusCode).to.equal(HTTP_STATUS_OK);
-        expect(res.result).to.be.an.object();
-        expect(res.result.email).to.equal('anhtuan150399@gmail.com');
-    });
-    it("Responds to access 1 choosen event", async () => {
+    it("Should get chosen event with get method", async () => {
         const res = await server.inject({
             method: "GET",
             url: "/event/62a6eb8953e1608f1a113941"
         });
         expect(res.statusCode).to.equal(HTTP_STATUS_OK);
         expect(res.result).to.be.an.object();
-
         expect(res.result.name).to.equal('BirthDay');
     });
-    it("Testing with an invalid user", async () => {
+    it("Should throw error when wrong id is passed", async () => {
         const res = await server.inject({
             method: "GET",
             url: "/user/62a6eb8953e1608f1a113944"
         });
         expect(res.statusCode).to.equal(500);
-        // expect(res.result.error).to.equal("Internal Server Error");
     });
-    it("Testing with an invalid page", async () => {
+    it("Should have status 404 when access page not found", async () => {
         const res = await server.inject({
             method: "GET",
             url: "/fall/"
@@ -85,7 +68,7 @@ describe("General Server Tests", () => {
     });
 });
 
-describe("General Server Tests", () => {
+describe("Testing User Router", () => {
     let server;
 
     beforeEach(async () => {
@@ -96,15 +79,23 @@ describe("General Server Tests", () => {
         await server.stop();
     });
 
-    it("Starts successfully", async () => {
+    it("Should Starts successfully", async () => {
         expect(server.type).to.equal("tcp");
         expect(server.settings.port).to.equal(HTTP_PORT);
         expect(server.settings.host).to.equal("localhost");
     });
 
+    it("Should get all users", async () => {
+        const res = await server.inject({
+            method: "GET",
+            url: "/users"
+        });
+        expect(res.statusCode).to.equal(HTTP_STATUS_OK);
+    });
 
 
-    it("TEST USER ROUTE", async () => {
+
+    it("TEST CRUD USER ROUTE WITH GIVEN DATA", async () => {
         const userss = {
             username: "anhtuan1233",
             password: "anhtuan1232",

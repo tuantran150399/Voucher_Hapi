@@ -28,7 +28,7 @@ export const getUserbyId = async (req: Request, res: ResponseToolkit) => {
       return res.response(user);
     }
   } catch (error) {
-    return handleError(error);
+    return res.response(handleError(error)).code(500);
   }
 };
 
