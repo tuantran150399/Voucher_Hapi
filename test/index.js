@@ -7,7 +7,7 @@ const { init } = require("../src/server");
 const HTTP_PORT = 3000;
 const HTTP_STATUS_OK = 200;
 
-describe("Server should start successfully", () => {
+describe("Server", () => {
     let server;
 
     beforeEach(async () => {
@@ -18,13 +18,13 @@ describe("Server should start successfully", () => {
         await server.stop();
     });
 
-    it("It should starts successfully", async () => {
+    it("Should starts successfully", async () => {
         expect(server.type).to.equal("tcp");
         expect(server.settings.port).to.equal(HTTP_PORT);
         expect(server.settings.host).to.equal("localhost");
     });
 
-    it("Should access index page and have the correct message ", async () => {
+    it("Could access index page and have the correct message ", async () => {
         const res = await server.inject({
             method: "GET",
             url: "/"
@@ -57,6 +57,8 @@ describe("Server should start successfully", () => {
             method: "GET",
             url: "/user/62a6eb8953e1608f1a113944"
         });
+        //console.log(res.result)
+        expect(res.result.message).to.equal("User not found")
         expect(res.statusCode).to.equal(500);
     });
     it("Should have status 404 when access page not found", async () => {
@@ -68,7 +70,7 @@ describe("Server should start successfully", () => {
     });
 });
 
-describe("Testing User Router", () => {
+describe("User router test", () => {
     let server;
 
     beforeEach(async () => {
@@ -77,12 +79,6 @@ describe("Testing User Router", () => {
 
     afterEach(async () => {
         await server.stop();
-    });
-
-    it("Should Starts successfully", async () => {
-        expect(server.type).to.equal("tcp");
-        expect(server.settings.port).to.equal(HTTP_PORT);
-        expect(server.settings.host).to.equal("localhost");
     });
 
     it("Should get all users", async () => {
@@ -95,7 +91,7 @@ describe("Testing User Router", () => {
 
 
 
-    it("TEST CRUD USER ROUTE WITH GIVEN DATA", async () => {
+    it("SHOULD SUCCESSFULLY TESTED CRUD USER WITH GIVEN DATA", async () => {
         const userss = {
             username: "anhtuan1233",
             password: "anhtuan1232",
