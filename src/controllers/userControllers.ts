@@ -26,10 +26,9 @@ export const getUserbyId = async (req: Request, res: ResponseToolkit) => {
     const user = await User.findById(req.params.id);
     if (user) {
       return res.response(user);
+    } else if (!user) {
+      return res.response({ message: "User not found" }).code(500);
     }
-    if(!user){
-      return res.response({ message: "User not found"}).code(500);
-  }
   } catch (error) {
     return res.response(handleError(error)).code(500);
   }

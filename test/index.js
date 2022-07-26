@@ -72,15 +72,12 @@ describe("Server", () => {
 
 describe("User router test", () => {
     let server;
-
     beforeEach(async () => {
         server = await init();
     });
-
     afterEach(async () => {
         await server.stop();
     });
-
     it("Should get all users", async () => {
         const res = await server.inject({
             method: "GET",
@@ -88,9 +85,6 @@ describe("User router test", () => {
         });
         expect(res.statusCode).to.equal(HTTP_STATUS_OK);
     });
-
-
-
     it("SHOULD SUCCESSFULLY TESTED CRUD USER WITH GIVEN DATA", async () => {
         const userss = {
             username: "anhtuan1233",
@@ -102,17 +96,14 @@ describe("User router test", () => {
             url: "/user",
             payload: userss
         };
-
-        
         const res = await server.inject(add_options);
         var resid = res.result._id.toString()
         expect(res.statusCode).to.equal(HTTP_STATUS_OK);
         expect(res.result.username).to.equal(add_options.payload.username);
         const resRead = await server.inject({
             method: "GET",
-            url: "/user/"+resid
+            url: "/user/" + resid
         });
-
         expect(resRead.statusCode).to.equal(HTTP_STATUS_OK);
         expect(resRead.result).to.be.an.object();
         expect(resRead.result.email).to.equal('anhtuan1232@gmail.com');
@@ -123,19 +114,15 @@ describe("User router test", () => {
         }
         let edit_options = {
             method: "PUT",
-            url: "/user/"+resid,
-            payload:users
+            url: "/user/" + resid,
+            payload: users
         };
-
-        
         const resEdit = await server.inject(edit_options);
         expect(resEdit.statusCode).to.equal(HTTP_STATUS_OK);
         expect(resEdit.result.username).to.equal(edit_options.payload.username);
-
-
-        let dell_options ={
+        let dell_options = {
             method: "DELETE",
-            url: '/user/'+resid,
+            url: '/user/' + resid,
         }
         const resDell = await server.inject(dell_options);
         expect(resDell.statusCode).to.equal(HTTP_STATUS_OK);

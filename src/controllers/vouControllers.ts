@@ -7,7 +7,7 @@ import { commitWithRetry } from "../services/transactions";
 import Boom from "@hapi/boom";
 import { handleError } from "../services/handleError";
 import { voucherNotify } from "../services/emailHandler";
-
+//Function create code voucher
 export const randomCode = (length: Number): string => {
   let result = "Vou";
   let characters =
@@ -34,17 +34,9 @@ export const createVoucher = async (req: Request, res: ResponseToolkit) => {
     if (eventUpdate2) {
       if (eventUpdate2?.remainVoucher >= 0) {
         //Create Voucher content
-
+        //expireTime have 7 days
         const expireTime = moment().add(7, "days").format("L");
         const codeVoucher = randomCode(6);
-
-        //create voucher
-        // const voucher = new Voucher({
-        //   code: codeVoucher,
-        //   event_id: eventUpdate2._id,
-        //   expire: expireTime,
-        // });
-        
         const voucherSave = await Voucher.create(
           [
             {
@@ -55,7 +47,7 @@ export const createVoucher = async (req: Request, res: ResponseToolkit) => {
           ],
           { session: session }
         );
-        //const voucherSave = await voucher.save();
+
         //add code voucher into mail queue
         await voucherNotify(codeVoucher);
         await commitWithRetry(session);
